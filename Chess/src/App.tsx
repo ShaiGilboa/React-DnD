@@ -3,16 +3,12 @@ import logo from './logo.svg';
 import './App.css';
 import Knight from './components/Kight';
 import Square from './components/Square';
+import Board from './components/Board';
 
 function App() {
   return (
     <>
-    <Square>
-      <Knight />
-    </Square>
-    <Square color={'black'}>
-      <Knight />
-    </Square>
+    <Board />
     </>
   );
 }

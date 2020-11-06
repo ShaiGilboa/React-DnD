@@ -20,6 +20,7 @@ export default Square;
 const Wrapper = styled.div<{color: 'black' | 'white'}>`
   background-color: ${props => props.color};
   color: ${props => props.color === 'black' ? 'white' : 'black'};
-  width: 20px;
-  height: 20px;
+  width: 100%;
+  height: 100%;
+  outline: solid 1px black;
 `;
