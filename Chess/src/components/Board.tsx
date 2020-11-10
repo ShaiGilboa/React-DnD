@@ -7,6 +7,8 @@ import { canMoveKnight } from '../utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/reducers/index';
 import { changeKnightLocation } from '../redux/actions/gameActions';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 interface props {
   style?: React.CSSProperties,
@@ -23,7 +25,7 @@ const Board : React.FC<PropsWithChildren<props>> = ({}) => {
     const row : number = Math.floor(index / 8)
     const color : "white" | "black" = (row + column) % 2 === 1 ? "black" : "white";
     const isKnight : boolean =  (knightX === column && knightY === row);
-    
+
     return (
       <SquareWrapper key={`square[${row},${column}]`}
         onClick={()=>  dispatch(changeKnightLocation([column, row]))}
@@ -32,7 +34,6 @@ const Board : React.FC<PropsWithChildren<props>> = ({}) => {
       </SquareWrapper>
       )
   }
-
 
   useEffect(()=>{
     const newSquares : ReactElement[] = [];
@@ -43,9 +44,11 @@ const Board : React.FC<PropsWithChildren<props>> = ({}) => {
   },[])
 
   return (
-    <Wrapper data-css='Board'>
-      {squares}
-    </Wrapper>
+    <DndProvider data-css='Board' backend={HTML5Backend}>
+      <Wrapper>
+        {squares}
+      </Wrapper>
+    </DndProvider>
   )
 }
 

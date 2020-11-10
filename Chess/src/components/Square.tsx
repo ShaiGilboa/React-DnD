@@ -15,7 +15,6 @@ const Square : React.FC<PropsWithChildren<props>> = ({ color = 'white',coordinat
   const [isKnight, setIsKnight] = useState<boolean>(false);
 
   useEffect(()=>{
-    console.log('isKnight', isKnight)
     if(coordinates[0] === knightLocation[0] && coordinates[1] === knightLocation[1]){
       setIsKnight(true)
     } else {

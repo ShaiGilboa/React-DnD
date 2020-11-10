@@ -4,7 +4,7 @@ import { canMoveKnight } from '../../utils';
 
 const initialState : gameState = {
   status: "idle",
-  knightLocation: [2,7],
+  knightLocation: [1,7],
   moves: 0,
   pastPositions: [],
 }
@@ -24,7 +24,6 @@ const appReducer = (state: gameState = initialState, action: actionMan) => {
         draftState.status = 'idle';
       });
       case 'CHANGE_KNIGHT_LOCATION':
-        console.log('action', action.data)
         return produce(state, draftState => {
           if (canMoveKnight(action.data, state.knightLocation)) {
           draftState.knightLocation = action.data;

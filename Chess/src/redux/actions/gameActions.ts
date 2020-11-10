@@ -10,7 +10,6 @@ export const setGameStatusIdle = () => {
 };
 
 export const changeKnightLocation = (newPosition : number[]) => {
-  console.log('newPosition', newPosition)
   return {
     type: 'CHANGE_KNIGHT_LOCATION',
     data: newPosition,
