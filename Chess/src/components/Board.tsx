@@ -1,16 +1,21 @@
-import React, { PropsWithChildren, ReactElement, useEffect, useState } from 'react';
+import React, { PropsWithChildren, ReactElement, useCallback, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import Square from './Square';
 import Knight from './Kight';
 import { RenderSquare } from '../functions';
-import { canMoveKnight, moveKnight, knightPosition} from '../utils';
+import { canMoveKnight } from '../utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../redux/reducers/index';
+import { changeKnightLocation } from '../redux/actions/gameActions';
 
 interface props {
   style?: React.CSSProperties,
-  knightPosition?: number[],
 };
 
 const Board : React.FC<PropsWithChildren<props>> = ({}) => {
+  const { knightLocation, status } = useSelector((state : RootState) => state.game)
+  const dispatch = useDispatch();
+
   const [squares, setSquares] = useState<ReactElement[]>([]);
 
   const renderSquare = (index : number, [knightX, knightY] : number[]) : ReactElement  => {
@@ -18,29 +23,21 @@ const Board : React.FC<PropsWithChildren<props>> = ({}) => {
     const row : number = Math.floor(index / 8)
     const color : "white" | "black" = (row + column) % 2 === 1 ? "black" : "white";
     const isKnight : boolean =  (knightX === column && knightY === row);
-    console.log('row, column', row, column)
     
     return (
       <SquareWrapper key={`square[${row},${column}]`}
-        onClick={()=> handleSquareClick(column, row)}
+        onClick={()=>  dispatch(changeKnightLocation([column, row]))}
       >
-        <Square color={color}>{isKnight ? <Knight /> : null} <p>{column}, {row}</p></Square>
+        <Square color={color} coordinates={[column, row]}><p>{column}, {row}</p></Square>
       </SquareWrapper>
       )
   }
 
-  function handleSquareClick(toX : number, toY : number) {
-    console.log('toX, toY', toX, toY)
-    console.log('anMoveKnight(toX, toY)', canMoveKnight(toX, toY))
-    if (canMoveKnight(toX, toY)) {
-      moveKnight(toX, toY)
-    }
-  }
 
   useEffect(()=>{
     const newSquares : ReactElement[] = [];
     for (let index = 0; index < 64; index ++) {
-      newSquares.push(renderSquare(index, knightPosition))
+      newSquares.push(renderSquare(index, knightLocation))
     }
     setSquares(newSquares)
   },[])
