@@ -5,5 +5,5 @@ export interface gameState {
 
 export interface actionMan {
   type: string,
-  
+  data: any,
 }
