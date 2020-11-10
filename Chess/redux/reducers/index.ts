@@ -1,11 +1,9 @@
 import { combineReducers } from 'redux';
 
-import appReducer from './appReducer';
-import quoteReducer from './quoteReducer';
+import gameReducer from './gameReducer';
 
 const rootReducer = combineReducers({ 
-  app: appReducer,
-  quote: quoteReducer,
+  game: gameReducer,
 });
 
 // export type RootState = ReturnType<typeof rootReducer>;
