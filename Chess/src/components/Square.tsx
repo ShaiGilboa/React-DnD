@@ -1,8 +1,13 @@
 import React, { PropsWithChildren, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useDrop } from 'react-dnd'
+
 import { RootState } from '../redux/reducers/index';
 import Knight from './Kight';
+import { ItemTypes } from '../DnDConstants';
+import { changeKnightLocation } from '../redux/actions/gameActions';
+import { canMoveKnight } from '../utils';
 
 interface props {
   style?: React.CSSProperties,
@@ -11,8 +16,18 @@ interface props {
 };
 
 const Square : React.FC<PropsWithChildren<props>> = ({ color = 'white',coordinates , children }) => {
+  const dispatch = useDispatch();
   const {knightLocation} = useSelector((state : RootState) => state.game)
   const [isKnight, setIsKnight] = useState<boolean>(false);
+  const [{ isOver, canDrop }, drop] = useDrop({
+    accept: ItemTypes.KNIGHT,
+    drop: () => dispatch(changeKnightLocation(coordinates)),
+    collect: monitor => ({
+      isOver: !!monitor.isOver(),
+      canDrop: !!monitor.canDrop()
+    }),
+    canDrop: () => canMoveKnight(coordinates, knightLocation)
+  })
 
   useEffect(()=>{
     if(coordinates[0] === knightLocation[0] && coordinates[1] === knightLocation[1]){
@@ -22,7 +37,11 @@ const Square : React.FC<PropsWithChildren<props>> = ({ color = 'white',coordinat
     }
   },[knightLocation])
   return (
-    <Wrapper data-css='Square' color={color} isKnight={isKnight}>
+    <Wrapper data-css='Square' color={color} isKnight={isKnight}
+      ref={drop}
+      isOver={isOver}
+      canDrop={canDrop}
+    >
       {children}
       {isKnight ? <Knight /> : null} 
     </Wrapper>
@@ -31,10 +50,18 @@ const Square : React.FC<PropsWithChildren<props>> = ({ color = 'white',coordinat
 
 export default Square;
 
-const Wrapper = styled.div<{color: 'black' | 'white', isKnight : boolean}>`
+const Wrapper = styled.div<{color: 'black' | 'white', isKnight : boolean, isOver : boolean, canDrop : boolean}>`
   background-color: ${props => props.color};
   color: ${props => props.color === 'black' ? 'white' : 'black'};
   width: 100%;
   height: 100%;
   outline: solid 3px ${props => props.isKnight ? 'red' : 'black'};
+  ${props => 
+    props.isOver && 'opacity: 0.5;'}
+  ${props =>
+    props.isOver && !props.canDrop && "background-color: red;"}
+  ${props =>
+    !props.isOver && props.canDrop && "background-color: yellow;"}
+  ${props =>
+    props.isOver && props.canDrop && "background-color: green;" }
 `;

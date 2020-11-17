@@ -55,6 +55,7 @@ const Board : React.FC<PropsWithChildren<props>> = ({}) => {
 export default Board;
 
 const Wrapper = styled.div`
+  grid-area: board;
   width: 100%;
   height: 100%;
   display: flex;

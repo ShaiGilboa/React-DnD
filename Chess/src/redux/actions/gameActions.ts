@@ -15,3 +15,9 @@ export const changeKnightLocation = (newPosition : number[]) => {
     data: newPosition,
   }
 }
+
+export const undo = () => {
+  return {
+    type: 'UNDO'
+  }
+}
