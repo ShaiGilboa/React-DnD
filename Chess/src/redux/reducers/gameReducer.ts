@@ -33,13 +33,21 @@ const appReducer = (state: gameState = initialState, action: actionMan) => {
       }
       });
     case 'UNDO': 
-      if (state.pastPositions.length > 0) {
-        return produce(state, draftState => {
+    return produce(state, draftState => {
+      const length = state.pastPositions.length
+      if (length > 0) {
           const pos : number[] = state.pastPositions[state.pastPositions.length - 1];
           draftState.knightLocation = pos;
-          draftState.pastPositions = state.pastPositions.splice(state.pastPositions.length - 1, 1);
-        })
-      }
+          if(length >= 1){
+            const newPos = JSON.parse(JSON.stringify(state.pastPositions));
+            newPos.splice(length, 1)
+            draftState.pastPositions = newPos;
+          } else {
+            draftState.pastPositions = [];
+          }
+          draftState.moves = state.moves - 1;
+        }
+      })
     default:
       return state;
   }
