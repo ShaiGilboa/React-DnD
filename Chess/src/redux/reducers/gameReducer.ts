@@ -38,9 +38,9 @@ const appReducer = (state: gameState = initialState, action: actionMan) => {
       if (length > 0) {
           const pos : number[] = state.pastPositions[state.pastPositions.length - 1];
           draftState.knightLocation = pos;
-          if(length >= 1){
-            const newPos = JSON.parse(JSON.stringify(state.pastPositions));
-            newPos.splice(length, 1)
+          if(length > 1){
+            let newPos = JSON.parse(JSON.stringify(state.pastPositions));
+            newPos.pop()
             draftState.pastPositions = newPos;
           } else {
             draftState.pastPositions = [];
