@@ -7,6 +7,7 @@ const initialState : gameState = {
   knightLocation: [1,7],
   moves: 0,
   pastPositions: [],
+  showPotentialMoves: false,
 }
 //appStatus: 'idle', 'loading'
 
@@ -28,6 +29,7 @@ const appReducer = (state: gameState = initialState, action: actionMan) => {
           draftState.pastPositions = [...state.pastPositions, state.knightLocation]
           draftState.moves = state.moves + 1;
           draftState.knightLocation = action.data;
+          draftState.showPotentialMoves = false;
       } else {
         
       }
@@ -35,6 +37,7 @@ const appReducer = (state: gameState = initialState, action: actionMan) => {
     case 'UNDO': 
     return produce(state, draftState => {
       const length = state.pastPositions.length
+      draftState.showPotentialMoves = false;
       if (length > 0) {
           const pos : number[] = state.pastPositions[state.pastPositions.length - 1];
           draftState.knightLocation = pos;
@@ -47,6 +50,10 @@ const appReducer = (state: gameState = initialState, action: actionMan) => {
           }
           draftState.moves = state.moves - 1;
         }
+      })
+    case 'TOGGLE_SHOW_POTENTIAL_MOVES': 
+    return produce(state, draftState => {
+      draftState.showPotentialMoves = !state.showPotentialMoves
       })
     default:
       return state;

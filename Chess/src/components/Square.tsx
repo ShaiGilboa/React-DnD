@@ -6,7 +6,7 @@ import { useDrop } from 'react-dnd'
 import { RootState } from '../redux/reducers/index';
 import Knight from './Kight';
 import { ItemTypes } from '../DnDConstants';
-import { changeKnightLocation } from '../redux/actions/gameActions';
+import { changeKnightLocation, toggleShowPotentialMoves } from '../redux/actions/gameActions';
 import { canMoveKnight } from '../utils';
 
 interface props {
@@ -17,8 +17,9 @@ interface props {
 
 const Square : React.FC<PropsWithChildren<props>> = ({ color = 'white',coordinates , children }) => {
   const dispatch = useDispatch();
-  const {knightLocation} = useSelector((state : RootState) => state.game)
+  const {knightLocation, showPotentialMoves} = useSelector((state : RootState) => state.game)
   const [isKnight, setIsKnight] = useState<boolean>(false);
+  const [canMove, setCanMove] = useState<boolean>(false);
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: ItemTypes.KNIGHT,
     drop: () => dispatch(changeKnightLocation(coordinates)),
@@ -36,11 +37,18 @@ const Square : React.FC<PropsWithChildren<props>> = ({ color = 'white',coordinat
       setIsKnight(false)
     }
   },[knightLocation])
+
+  useEffect(() => {
+    showPotentialMoves
+      ? setCanMove(canMoveKnight(coordinates, knightLocation))
+      : setCanMove(false)
+  }, [showPotentialMoves])
   return (
     <Wrapper data-css='Square' color={color} isKnight={isKnight}
       ref={drop}
       isOver={isOver}
       canDrop={canDrop}
+      canMove={canMove}
     >
       {children}
       {isKnight ? <Knight /> : null} 
@@ -50,7 +58,7 @@ const Square : React.FC<PropsWithChildren<props>> = ({ color = 'white',coordinat
 
 export default Square;
 
-const Wrapper = styled.div<{color: 'black' | 'white', isKnight : boolean, isOver : boolean, canDrop : boolean}>`
+const Wrapper = styled.div<{color: 'black' | 'white', isKnight : boolean, isOver : boolean, canDrop : boolean, canMove: boolean}>`
   background-color: ${props => props.color};
   color: ${props => props.color === 'black' ? 'white' : 'black'};
   width: 100%;
@@ -61,7 +69,7 @@ const Wrapper = styled.div<{color: 'black' | 'white', isKnight : boolean, isOver
   ${props =>
     props.isOver && !props.canDrop && "background-color: red;"}
   ${props =>
-    !props.isOver && props.canDrop && "background-color: yellow;"}
+    (props.canDrop || props.canMove) && "background-color: yellow;"}
   ${props =>
     props.isOver && props.canDrop && "background-color: green;" }
 `;

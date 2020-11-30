@@ -3,6 +3,7 @@ export interface gameState {
   knightLocation: number[],
   moves: number,
   pastPositions: Array<number[]>,
+  showPotentialMoves: boolean,
 }
 
 export interface actionMan {

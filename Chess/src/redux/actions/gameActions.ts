@@ -21,3 +21,9 @@ export const undo = () => {
     type: 'UNDO'
   }
 }
+
+export const toggleShowPotentialMoves = () => {
+  return {
+    type: 'TOGGLE_SHOW_POTENTIAL_MOVES'
+  }
+}
