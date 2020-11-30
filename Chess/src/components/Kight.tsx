@@ -26,9 +26,10 @@ const Knight : React.FC<PropsWithChildren<props>> = () => {
     <Wrapper data-css='Knight'
       ref={drag}
       isDragging={isDragging}
-      onMouseUp={() => {
+      onMouseUp={(e) => {
         if(!isDragging) {
           console.log('%c test', 'background: black; color: red')
+          e.stopPropagation()
           dispatch(toggleShowPotentialMoves())
         }
       }}
@@ -46,9 +47,9 @@ const Wrapper = styled.div<{isDragging : boolean}>`
   opacity: ${props => props.isDragging ? '0.5' : '1'};
   width: fit-content;
   height: fit-content;
-  /* p{ */
+  text-align: center;
     font-size: 25px;
     font-weight: bold;
     cursor: move;
-  /* } */
+    line-height: 100%;
 `;

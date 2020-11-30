@@ -49,6 +49,9 @@ const Square : React.FC<PropsWithChildren<props>> = ({ color = 'white',coordinat
       isOver={isOver}
       canDrop={canDrop}
       canMove={canMove}
+      onMouseUp={() => {
+        isKnight && dispatch(toggleShowPotentialMoves())
+      }}
     >
       {children}
       {isKnight ? <Knight /> : null} 
@@ -63,7 +66,7 @@ const Wrapper = styled.div<{color: 'black' | 'white', isKnight : boolean, isOver
   color: ${props => props.color === 'black' ? 'white' : 'black'};
   width: 100%;
   height: 100%;
-  outline: solid 3px ${props => props.isKnight ? 'red' : 'black'};
+  /* outline: solid 3px ${props => props.isKnight ? 'red' : 'black'}; */
   ${props => 
     props.isOver && 'opacity: 0.5;'}
   ${props =>
@@ -72,4 +75,8 @@ const Wrapper = styled.div<{color: 'black' | 'white', isKnight : boolean, isOver
     (props.canDrop || props.canMove) && "background-color: yellow;"}
   ${props =>
     props.isOver && props.canDrop && "background-color: green;" }
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

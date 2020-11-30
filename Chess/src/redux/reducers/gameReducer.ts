@@ -4,7 +4,7 @@ import { canMoveKnight } from '../../utils';
 
 const initialState : gameState = {
   status: "idle",
-  knightLocation: [1,7],
+  knightLocation: [4,4],
   moves: 0,
   pastPositions: [],
   showPotentialMoves: false,

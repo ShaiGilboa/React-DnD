@@ -30,7 +30,9 @@ const Board : React.FC<PropsWithChildren<props>> = ({}) => {
       <SquareWrapper key={`square[${row},${column}]`}
         onClick={()=>  dispatch(changeKnightLocation([column, row]))}
       >
-        <Square color={color} coordinates={[column, row]}><p>{column}, {row}</p></Square>
+        <Square color={color} coordinates={[column, row]}>
+          {/* <p>{column}, {row}</p> */}
+          </Square>
       </SquareWrapper>
       )
   }
@@ -56,10 +58,14 @@ export default Board;
 
 const Wrapper = styled.div`
   grid-area: board;
-  width: 100%;
-  height: 100%;
+  box-sizing: border-box;
+  margin: 1rem;
+  width: calc(100% - 2rem);
+  height: calc(100% - 2rem);
   display: flex;
   flex-wrap: wrap;
+  -webkit-box-shadow: 0px 0px 25px 3px rgba(0,0,0,0.66); 
+  box-shadow: 0px 0px 25px 3px rgba(0,0,0,0.66);
 `;
 
 const SquareWrapper = styled.div`
